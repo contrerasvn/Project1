@@ -9,7 +9,7 @@ TODO: Enter the playbook file.
 
 This document contains the following details:
 
-Description of the Topologu
+Description of the Topology
 Access Policies
 ELK Configuration
 
@@ -22,87 +22,72 @@ How to Use the Ansible Build
 
 Description of the Topology
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
-Load balancing ensures that the application will be highly _____, in addition to restricting _____ to the network.
+Load balancing ensures that the application will be highly _functional, in addition to restricting high traffic to the network.
 
-TODO: What aspect of security do load balancers protect? What is the advantage of a jump box?
+What aspect of security do load balancers protect? What is the advantage of a jump box?
+The load balancers prevent traffic from overlading severs by rerouting traffic to different servers. This helps prevent single point attacks.
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the network and systemlogs.
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the _____ and system _____.
-
-TODO: What does Filebeat watch for?
-TODO: What does Metricbeat record?
+Filebeat monitors log files and is able to be searched through elasticsearch/logstach.
+Metricbeat records metrics and statistics and can be reviewed through elasticsearch/logstach.
 
 The configuration details of each machine may be found below.
 Note: Use the Markdown Table Generator to add/remove values from the table.
 
 
 
-Name
-Function
-IP Address
-Operating System
+Name :Jump-Box-Provisioner	
+Function: Gateway
+IP Address 10.0.0.4
+Operating System Linux
 
+Name:ELKVM 
+Function: Server
+IP Address: 10.1.0.11
+Operating System: Linux
 
+Name: VM1
+Gateway: Server
+IP Address:10.1.0.13
+Operating System: Linux
 
-
-Jump Box
-Gateway
-10.0.0.1
-Linux
-
-
-TODO
-
-
-
-
-
-TODO
-
-
-
-
-
-TODO
-
-
-
+Name:VM2
+Gateway:Server
+IP Address:10.1.0.14
+Operating System:Linux
 
 
 
 
 Access Policies
 The machines on the internal network are not exposed to the public Internet.
-Only the _____ machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
+Only the jumpboxprovisioner machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
 
 TODO: Add whitelisted IP addresses
 
-Machines within the network can only be accessed by _____.
+Machines within the network can only be accessed by my local IP address
 
 TODO: Which machine did you allow to access your ELK VM? What was its IP address?
-
+The jumpboxprovisioner allowed access to the ELK VM. The IP address is 10.0.04
 A summary of the access policies in place can be found in the table below.
 
 
 
-Name
-Publicly Accessible
-Allowed IP Addresses
+Name: Jump-Box-Provisioner
+Publicly Accessible yes
+Allowed IP Addresses public ip
 
+Name ELK-VM 
+Publicly Accessible: No
+Allowed IP Address:10.0.0.4
 
+Name: VM 1 
+Publicly Accessible: No
+Allowed IP Address: 10.0.04
 
-
-Jump Box
-Yes/No
-10.0.0.1 10.0.0.2
-
-
-
-
-
-
-
-
-
+Name VM 2 
+Publicly Accesible: No
+Allowed IP Address: 10.0.0.4
 
 
 
@@ -111,44 +96,51 @@ Yes/No
 Elk Configuration
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because...
 
-TODO: What is the main advantage of automating configuration with Ansible?
+ What is the main advantage of automating configuration with Ansible?
+ With ansible you are able to use yml playbooks for configuration managenment as well as automation.
 
 The playbook implements the following tasks:
 
 TODO: In 3-5 bullets, explain the steps of the ELK installation play. E.g., install Docker; download image; etc.
-...
-...
+Open terminal and SSH into the jump-box-provisioner
+Install docker with command sudo docker start tender_morse and sudo docker attach tender_morse
+Command directory to the roles directory, /etc/ansible/roles, and create the ELK playbook.
+SSH into the ELK virtual machine. 
 
-The following screenshot displays the result of running docker ps after successfully configuring the ELK instance.
-Note: The following image link needs to be updated. Replace docker_ps_output.png with the name of your screenshot image file.
 
 
 Target Machines & Beats
 This ELK server is configured to monitor the following machines:
 
-TODO: List the IP addresses of the machines you are monitoring
+IP Addresses of machines monitored: VM-1 10.1.0.13, VM-2 10.1.0.14
+
 
 We have installed the following Beats on these machines:
-
-TODO: Specify which Beats you successfully installed
+Filebeat and Metricbeat are installed
 
 These Beats allow us to collect the following information from each machine:
 
-TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., Winlogbeat collects Windows logs, which we use to track user logon events, etc.
-
+Beats:
+Filebeat collects log files from the remote machine and monitors the data. 
+Metricbeat collects the machine information such as the operating system and outputs the data.
 
 Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned:
 SSH into the control node and follow the steps below:
 
-Copy the _____ file to _____.
-Update the _____ file to include...
-Run the playbook, and navigate to ____ to check that the installation worked as expected.
+Copy the file to _/etc/ansible/roles/files____.
+Update the __filebeat-configuration.yml___ file to include the ELK private ip in line 62 and 96.
+Run the playbook, and navigate to http://20.49.3.56.5601 to check that the installation worked as expected.
 
-TODO: Answer the following questions to fill in the blanks:
+Copy the file to _/etc/ansible/roles/files____.
+Update the _metricbeat-configuration.yml___ file to include the ELK private ip.
+Run the playbook, and navigate to http://20.49.3.56.5601 to check that the installation worked as expected.
 
-Which file is the playbook? Where do you copy it?
-Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?
+
+ Answer the following questions to fill in the blanks:
+
+Which file is the playbook? Where do you copy it? The file is filebeat-playbook.yml and can be found in /etc/ansible/roles
+Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on? 
 _Which URL do you navigate to in order to check that the ELK server is running?
-
+http://20.49.3.56:5601
 As a Bonus, provide the specific commands the user will need to run to download the playbook, update the files, etc.
